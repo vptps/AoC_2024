@@ -14,7 +14,7 @@ const getAntinodes = (a, b) => {
       y: a.y + yDiff
     },
     {
-      x: a.x -xDiff * 2,
+      x: a.x - xDiff * 2,
       y: a.y - yDiff * 2
     },
   ]
@@ -26,7 +26,7 @@ const getAntinodes2 = (a, b) => {
   const [xDiff, yDiff] = [a.x - b.x, a.y - b.y];
   let insideGrid = true;
   let i = 1;
-  const antinodes = []
+  const antinodes = [a];
 
   while (insideGrid) {
     let a1 = {
@@ -35,13 +35,9 @@ const getAntinodes2 = (a, b) => {
     };
 
     let a2 ={
-      x: a.x - xDiff * 2 * i,
-      y: a.y - yDiff * 2 * i
+      x: a.x - xDiff * i,
+      y: a.y - yDiff * i
     };
-
-    if (a1.y === 0 || a2.y === 0) {
-      console.log('AAAAAAAAAAAAA', a1, a2)
-    }
 
     insideGrid = lines[a1.y]?.[a1.x] || lines[a2.y]?.[a2.x];
     if (insideGrid) {
@@ -51,7 +47,6 @@ const getAntinodes2 = (a, b) => {
 
     i++;
   }
-  console.log('ON SORT DE LA BOUCLE', antinodes)
 
   return antinodes;
 }
@@ -88,7 +83,7 @@ for (const antennaId in antennaSet) {
   for (let i = 0; i < antennaSet[antennaId].length; i++) { // oppose every antenna to every other
     for (let j = i + 1; j < antennaSet[antennaId].length; j++) {
       antinodes.push(...getAntinodes(antennaSet[antennaId][i], antennaSet[antennaId][j]));
-      antinodes2.push(...getAntinodes2(antennaSet[antennaId][j], antennaSet[antennaId][i]));
+      antinodes2.push(...getAntinodes2(antennaSet[antennaId][i], antennaSet[antennaId][j]));
     }
   }
 }
@@ -100,7 +95,5 @@ antinodes2 = removeDuplicates(antinodes2);
 // remove out of bounds antinodes
 antinodes = removeOutOfBounds(antinodes);
 antinodes2 = removeOutOfBounds(antinodes2);
-
-console.log(antinodes2.sort((a, b) => a.y - b.y));
 
 console.log(antinodes.length, antinodes2.length);
